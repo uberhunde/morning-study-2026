@@ -1,0 +1,29 @@
+name: Daily Attendance Issue
+on:
+  schedule:
+    # 매일 아침 한국시간(KST) 06:55에 실행 (UTC 기준 21:55)
+    - cron: '55 21 * * *'
+  workflow_dispatch: # 수동 실행 버튼 활성화
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create Daily Issue
+        uses: imjohnbo/issue-bot@v3
+        with:
+          title: "☀️오늘의 모닝 출석부"
+          body: |
+            ## 📅 오늘의 출석부 (KST ${{ github.event.schedule }})
+            
+            오늘도 성장을 위해 모인 여러분을 환영합니다! 
+            아래 양식으로 오늘 아침의 목표를 공유해 주세요.
+            
+            **[출석 양식]**
+            - 성함: 
+            - 오늘의 목표: 
+            - 스터디 종료 예상시간: 
+          labels: attendance
+          token: ${{ secrets.GITHUB_TOKEN }}
