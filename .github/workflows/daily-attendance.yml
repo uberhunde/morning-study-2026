@@ -11,19 +11,24 @@ jobs:
     permissions:
       issues: write
     steps:
+      # 1단계: 한국 시간 기준으로 날짜 가져오기
+      - name: Get Current Date
+        id: date
+        run: echo "DATE=$(date -d '+9 hours' +'%Y.%m.%d.')" >> $GITHUB_ENV
+
+      # 2단계: 가져온 날짜 변수를 사용하여 이슈 생성
       - name: Create Daily Issue
         uses: imjohnbo/issue-bot@v3
         with:
-          title: "☀️오늘의 모닝 출석부"
+          title: "☀️ [${{ env.DATE }}] 오늘의 모닝 스터디 출석부"
           body: |
-            ## 📅 오늘의 출석부 (KST ${{ github.event.schedule }})
+            ## 📅 오늘의 출석부 (${{ env.DATE }})
             
             오늘도 성장을 위해 모인 여러분을 환영합니다! 
             아래 양식으로 오늘 아침의 목표를 공유해 주세요.
             
             **[출석 양식]**
-            - 성함: 
             - 오늘의 목표: 
-            - 스터디 종료 예상시간: 
+            - 스터디 종료 예상 시간: 
           labels: attendance
           token: ${{ secrets.GITHUB_TOKEN }}
